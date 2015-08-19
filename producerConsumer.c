@@ -317,13 +317,11 @@ void* top_level(void* arg){
 		parray[i-1].numExitedProfs = &profExit;
 		parray[i-1].Wi = first.Wi;
 		parray[i-1].wi = first.wi;
-		//parray[i-1].waitTime = (rand() % (first.Wi-first.wi+1)) + first.wi;
 		parray[i-1].numAssignings =  first.ai;
 		parray[i-1].min_num_assignments = first.ni;
 		parray[i-1].max_num_assignments = first.Ni;
 		parray[i-1].min_assignment_hours = first.hi;
 		parray[i-1].max_assignment_hours = first.Hi;
-		//parray[i-1].numHours = (rand() % (first.Hi - first.hi+1)) + first.hi;
 		parray[i-1].totalNumProfs = first.pi;
 		parray[i-1].condition = &condition;
 		parray[i-1].totalNumStudents = first.si;
@@ -360,7 +358,6 @@ void* prof(void* parg){
 	for(i=0; i<arg.numAssignings; i++){
 		sleep((rand() % (arg.Wi-arg.wi+1)) + arg.wi);
 		int n = (rand() % (arg.max_num_assignments-arg.min_num_assignments+1)) + arg.min_num_assignments;
-		//printf("DHJSDGJSHDGHJSGD%d\n",n);
 		int j,k;
 		for(j=0; j<n; j++){
 			assignmentNum++;
@@ -380,7 +377,6 @@ void* prof(void* parg){
 			}
 			arg.buffer[*(arg.bufferWriteIndex)] = ass;
 			(*arg.bufferWriteIndex) = (*(arg.bufferWriteIndex) + 1) % arg.bufferSize;
-			//printf("Write Index %d     Read Index %d\n",(*arg.bufferWriteIndex), (*arg.bufferReadIndex));
 			pthread_mutex_unlock(arg.buffMutex);
 		}
 	}
@@ -388,7 +384,6 @@ void* prof(void* parg){
 	fprintf(stdout, "EXITING Professor %d\n", arg.profNum);
 	(*arg.numExitedProfs)++;
 	if((*arg.numExitedProfs) == arg.totalNumProfs){
-		//fprintf(stdout, "WORKED\n");
 		pthread_cond_signal(arg.condition);
 	}
 	pthread_mutex_unlock(arg.profsCanExitMutex);
